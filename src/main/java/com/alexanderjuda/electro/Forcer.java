@@ -1,6 +1,8 @@
 package com.alexanderjuda.electro;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -39,5 +41,17 @@ public class Forcer {
         double f_best = objectiver.functionValueForPosition(bestPosition);
 
         return (f_xi - f_xj) / (f_worst - f_best);
+    }
+
+    static Optional<Particle> worstParticle(List<Particle> population) {
+
+        return population.stream().
+                max(Comparator.comparing(Particle::getFunctionValue));
+    }
+
+    static Optional<Particle> bestParticle(List<Particle> population) {
+
+        return population.stream().
+                min(Comparator.comparing(Particle::getFunctionValue));
     }
 }

@@ -63,4 +63,40 @@ public class ForcerTest {
         BasicMatrix expectedForce = factory.columns(new double[] {0.0, 0.3, 0.0, -0.1, -0.2});
         Assert.assertArrayEquals(expectedForce.toRawCopy1D(), force.toRawCopy1D(), 0.001);
     }
+
+    @Test
+    public void worstParticle() {
+        // Given
+        List<Particle> population = Arrays.asList(
+                new Particle(new double[] {0.0}, 2.0),
+                new Particle(new double[] {0.0}, 1.0),
+                new Particle(new double[] {0.0}, 3.0),
+                new Particle(new double[] {0.0}, 4.0)
+        );
+
+        // When
+        Particle worst = Forcer.worstParticle(population).get();
+
+        // Then
+        Particle expectedWorst = population.get(3);
+        Assert.assertEquals(expectedWorst, worst);
+    }
+
+    @Test
+    public void bestParticle() {
+        // Given
+        List<Particle> population = Arrays.asList(
+                new Particle(new double[] {0.0}, 2.0),
+                new Particle(new double[] {0.0}, 1.0),
+                new Particle(new double[] {0.0}, 3.0),
+                new Particle(new double[] {0.0}, 4.0)
+        );
+
+        // When
+        Particle best = Forcer.bestParticle(population).get();
+
+        // Then
+        Particle expectedBest = population.get(1);
+        Assert.assertEquals(expectedBest, best);
+    }
 }

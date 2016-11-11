@@ -41,7 +41,6 @@ public class PopulationStarter {
         List<Particle> particles = new ArrayList<>();
         for (int i = 0; i < populationSize; i++) {
             BasicMatrix lambda = lambdas.selectColumns(i);
-            // // TODO: 11/11/2016 replace *(-1) with .substract()
             BasicMatrix p = u.subtract(l).multiplyElements(lambda).add(l);
 
             double functionValue = objectiver.functionValueForPosition(p);
