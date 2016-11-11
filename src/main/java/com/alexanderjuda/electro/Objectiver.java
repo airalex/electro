@@ -1,5 +1,7 @@
 package com.alexanderjuda.electro;
 
+import org.ojalgo.matrix.BasicMatrix;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -11,36 +13,35 @@ import java.util.stream.Collectors;
  * by A. Yurtkuran & E. Emel (AKA TSP paper).
  */
 public class Objectiver {
-    private List<List<Double>> costsMatrix;
+    private BasicMatrix costsMatrix;
 
-    public Objectiver(List<List<Double>> costsMatrix) {
-        int size = costsMatrix.size();
-        if (size < 1 || costsMatrix.get(0).size() != size) {
-            throw new IllegalArgumentException("Invalid costsMatrix size.");
+    public Objectiver(BasicMatrix costsMatrix) throws IllegalArgumentException {
+        if (!costsMatrix.isSquare()) {
+            throw new IllegalArgumentException("Non-square costs matrix.");
         }
         this.costsMatrix = costsMatrix;
     }
 
-    double functionValue(List<Integer> stopIndices) {
-        int n = stopIndices.size();
-        if (n <= 0 || costsMatrix.size() != n || costsMatrix.get(0).size() != n) {
-            throw new IllegalArgumentException("Stops count invalid.\nIs "+n+", should be"+costsMatrix.size()+".");
+    double functionValue(List<Integer> stopIndices) throws IllegalArgumentException {
+        int stopsCount = stopIndices.size();
+        if (costsMatrix.countRows() != stopsCount) {
+            throw new IllegalArgumentException("Stops count invalid.\nIs "+stopsCount+", should be "+costsMatrix.countRows()+".");
         }
 
         List<Integer> loopedStops = new ArrayList<>(stopIndices);
         loopedStops.add(stopIndices.get(0)); // return to the first stop
 
-        Double costsAccumulator = 0.0;
-        for (int i = 0; i < n; i++) {
+        double costsAccumulator = 0.0;
+        for (int i = 0; i < stopsCount; i++) {
             Integer from = loopedStops.get(i);
             Integer to = loopedStops.get(i+1);
 
-            if (from < 0 || n <= from || to < 0 || n <= to) {
+            if (from < 0 || stopsCount <= from || to < 0 || stopsCount <= to) {
                 throw new IllegalArgumentException("Proposed step ("+from+" -> "+to+") has incorrect indices.\n" +
-                        "Correct values are between 0 and "+ (n-1) +".");
+                        "Correct values are between 0 and "+ (costsMatrix.countRows()-1) +".");
             }
 
-            Double cost = costsMatrix.get(from).get(to);
+            double cost = costsMatrix.doubleValue(from, to);
             costsAccumulator += cost;
         }
 

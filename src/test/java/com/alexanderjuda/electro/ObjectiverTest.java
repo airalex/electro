@@ -2,25 +2,28 @@ package com.alexanderjuda.electro;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.ojalgo.matrix.BasicMatrix;
+import org.ojalgo.matrix.PrimitiveMatrix;
 
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Created by alex on 07/11/2016.
- */
+
 public class ObjectiverTest {
     @Test
     public void functionValue() throws Exception {
         // Given
-        List<List<Double>> costs = Arrays.asList(
-                Arrays.asList(0.0, 1.2, 1.3),
-                Arrays.asList(1.2, 0.0, 2.3),
-                Arrays.asList(1.3, 2.3, 0.0)
-        );
+        BasicMatrix.Factory<PrimitiveMatrix> factory = PrimitiveMatrix.FACTORY;
+        BasicMatrix costs = factory.rows(new double[][] {
+                {0.0, 1.2, 1.3},
+                {1.2, 0.0, 2.3},
+                {1.3, 2.3, 0.0}
+        });
+
         Objectiver objectiver = new Objectiver(costs);
 
         // When
+        // 0 -> 1 -> 2 -> 0
         List<Integer> stops = Arrays.asList(0, 1, 2);
         Double value = objectiver.functionValue(stops);
 
@@ -71,11 +74,12 @@ public class ObjectiverTest {
     @Test
     public void functionValueFromPosition() throws Exception {
         // Given
-        List<List<Double>> costs = Arrays.asList(
-                Arrays.asList(0.0, 1.2, 1.3),
-                Arrays.asList(1.2, 0.0, 2.3),
-                Arrays.asList(1.3, 2.3, 0.0)
-        );
+        BasicMatrix.Factory<PrimitiveMatrix> factory = PrimitiveMatrix.FACTORY;
+        BasicMatrix costs = factory.rows(new double[][] {
+                {0.0, 1.2, 1.3},
+                {1.2, 0.0, 2.3},
+                {1.3, 2.3, 0.0}
+        });
         Objectiver objectiver = new Objectiver(costs);
 
         // When
