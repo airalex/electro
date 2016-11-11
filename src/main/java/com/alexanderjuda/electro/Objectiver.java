@@ -54,9 +54,14 @@ public class Objectiver {
     }
 
     // Random Key representation (Doubles) -> indices (Integers)
-    static List<Integer> indicesFromPosition(BasicMatrix position) {
+    static List<Integer> indicesFromPosition(BasicMatrix position) throws IllegalArgumentException {
+        if (position.countColumns() != 1) {
+            throw new IllegalArgumentException("position should be a column vector. "+
+                    "Now it has "+position.countColumns()+" columns.");
+        }
+
         List<Pair<Integer, Double>> indexValuePairs = new ArrayList<>();
-        for (int i = 0; i < position.countColumns(); i++) {
+        for (int i = 0; i < position.countRows(); i++) {
             double positionValue = position.doubleValue(i, 0);
             indexValuePairs.add(new Pair<>(i, positionValue));
         }
