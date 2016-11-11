@@ -49,15 +49,16 @@ public class Objectiver {
     }
 
     // Helper method. Integrates functionValue() with indicesFromPosition().
-    double functionValueForPosition(List<Double> position) {
+    double functionValueForPosition(BasicMatrix position) {
         return functionValue(indicesFromPosition(position));
     }
 
     // Random Key representation (Doubles) -> indices (Integers)
-    static List<Integer> indicesFromPosition(List<Double> position) {
+    static List<Integer> indicesFromPosition(BasicMatrix position) {
         List<Pair<Integer, Double>> indexValuePairs = new ArrayList<>();
-        for (int i = 0; i < position.size(); i++) {
-            indexValuePairs.add(new Pair<>(i, position.get(i)));
+        for (int i = 0; i < position.countColumns(); i++) {
+            double positionValue = position.doubleValue(i, 0);
+            indexValuePairs.add(new Pair<>(i, positionValue));
         }
         Comparator<Double> comparator = Comparator.naturalOrder();
 

@@ -34,8 +34,8 @@ public class ObjectiverTest {
     @Test
     public void indicesFromSortedPosition() throws Exception {
         // Given
-        List<Double> position = Arrays.asList(0.0, 2.0, 2.5, 3.1, 3.4);
-
+        BasicMatrix.Factory<PrimitiveMatrix> factory = PrimitiveMatrix.FACTORY;
+        BasicMatrix position = factory.rows(new double[] {0.0, 2.0, 2.5, 3.1, 3.4});
         // When
         List<Integer> indices = Objectiver.indicesFromPosition(position);
 
@@ -46,28 +46,30 @@ public class ObjectiverTest {
     @Test
     public void indicesFromUnsortedPosition() throws Exception {
         // Given
-        //                   number in order: 0    5    1    6    2    3    4
-        List<Double> position = Arrays.asList(0.0, 5.0, 2.0, 6.1, 2.5, 3.1, 3.4);
-        List<Integer> expectedIndices = Arrays.asList(0, 2, 4, 5, 6, 1, 3);
+        BasicMatrix.Factory<PrimitiveMatrix> factory = PrimitiveMatrix.FACTORY;
+        //                                number in order: 0    5    1    6    2    3    4
+        BasicMatrix position = factory.rows(new double[] {0.0, 5.0, 2.0, 6.1, 2.5, 3.1, 3.4});
 
         // When
         List<Integer> indices = Objectiver.indicesFromPosition(position);
 
         // Then
+        List<Integer> expectedIndices = Arrays.asList(0, 2, 4, 5, 6, 1, 3);
         Assert.assertEquals(expectedIndices, indices);
     }
 
     @Test
     public void indicesFromUnsortedPosition2() throws Exception {
         // Given
-        //                   number in order: 0    5    1    6    2    3    4
-        List<Double> position = Arrays.asList(0.0, 5.0, 2.0, 6.1, 2.5, 3.1, 3.4);
-        List<Integer> expectedIndices = Arrays.asList(0, 2, 4, 5, 6, 1, 3);
+        BasicMatrix.Factory<PrimitiveMatrix> factory = PrimitiveMatrix.FACTORY;
+        //                                number in order: 0    5    1    6    2    3    4
+        BasicMatrix position = factory.rows(new double[] {0.0, 5.0, 2.0, 6.1, 2.5, 3.1, 3.4});
 
         // When
         List<Integer> indices = Objectiver.indicesFromPosition(position);
 
         // Then
+        List<Integer> expectedIndices = Arrays.asList(0, 2, 4, 5, 6, 1, 3);
         Assert.assertEquals(expectedIndices, indices);
     }
 
@@ -83,7 +85,7 @@ public class ObjectiverTest {
         Objectiver objectiver = new Objectiver(costs);
 
         // When
-        List<Double> position = Arrays.asList(0.1, 1.3, 2.4);
+        BasicMatrix position = factory.rows(new double[] {0.1, 1.3, 2.4});
         Double value = objectiver.functionValueForPosition(position);
 
         // Then

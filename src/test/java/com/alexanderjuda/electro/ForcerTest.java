@@ -5,41 +5,48 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.ojalgo.matrix.BasicMatrix;
+import org.ojalgo.matrix.PrimitiveMatrix;
 
 /**
  * Created by alex on 09/11/2016.
  */
 public class ForcerTest {
-//    @Test
-//    public void relativeCharge() {
-//        // Given
-//        List<List<Double>> costs = Arrays.asList(
-//                Arrays.asList(0.0, 1.0, 1.4, 1.3, 1.0),
-//                Arrays.asList(1.0, 0.0, 1.0, 1.4, 1.7),
-//                Arrays.asList(1.4, 1.0, 0.0, 1.0, 1.3),
-//                Arrays.asList(1.3, 1.4, 1.0, 0.0, 1.0),
-//                Arrays.asList(1.0, 1.7, 1.3, 1.0, 0.0)
-//        );
-//        Objectiver objectiver = new Objectiver(costs);
-//
-//        // 0 -> 1 -> 2 -> 3 -> 4
+    @Test
+    public void relativeCharge() {
+        // Given
+        BasicMatrix.Factory<PrimitiveMatrix> factory = PrimitiveMatrix.FACTORY;
+        BasicMatrix costs = factory.rows(new double[][]{
+                {0.0, 1.0, 1.4, 1.3, 1.0},
+                {1.0, 0.0, 1.0, 1.4, 1.7},
+                {1.4, 1.0, 0.0, 1.0, 1.3},
+                {1.3, 1.4, 1.0, 0.0, 1.0},
+                {1.0, 1.7, 1.3, 1.0, 0.0}
+        });
+        Objectiver objectiver = new Objectiver(costs);
+
+        // 0 -> 1 -> 2 -> 3 -> 4
 //        List<Double> bestPosition = Arrays.asList(0.0, 1.0, 2.0, 3.0, 4.0);
-//
-//        // 0 -> 1 -> 3 -> 2 -> 4
+        BasicMatrix bestPosition = factory.rows(new double[] {0.0, 1.0, 2.0, 3.0, 4.0});
+
+        // 0 -> 1 -> 3 -> 2 -> 4
 //        List<Double> position1 = Arrays.asList(0.0, 1.0, 3.0, 2.0, 4.0);
-//
-//        // 0 -> 3 -> 4 -> 2 -> 1
+        BasicMatrix position1 = factory.rows(new double[] {0.0, 1.0, 3.0, 2.0, 4.0});
+
+        // 0 -> 3 -> 4 -> 2 -> 1
 //        List<Double> position2 = Arrays.asList(0.0, 4.0, 3.0, 1.0, 2.0);
-//
-//        // 0 -> 4 -> 1 -> 2 -> 3
+        BasicMatrix position2 = factory.rows(new double[] {0.0, 4.0, 3.0, 1.0, 2.0});
+
+        // 0 -> 4 -> 1 -> 2 -> 3
+        BasicMatrix worstPosition = factory.rows(new double[] {0.0, 2.0, 3.0, 4.0, 1.0});
 //        List<Double> worstPosition = Arrays.asList(0.0, 2.0, 3.0, 4.0, 1.0);
-//
-//        // When
-//        double charge = Forcer.relativeCharge(position1, position2, worstPosition, bestPosition, objectiver);
-//
-//        // Then
-//        Assert.assertEquals(0.1, charge, 0.001);
-//    }
+
+        // When
+        double charge = Forcer.relativeCharge(position1, position2, worstPosition, bestPosition, objectiver);
+
+        // Then
+        Assert.assertEquals(0.1, charge, 0.001);
+    }
 //
 //    @Test
 //    public void relativePosition() {
