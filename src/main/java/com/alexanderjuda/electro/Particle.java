@@ -1,44 +1,50 @@
 package com.alexanderjuda.electro;
 
-import java.util.List;
+import org.ojalgo.matrix.BasicMatrix;
+import org.ojalgo.matrix.PrimitiveMatrix;
 
 /**
- * Created by alex on 07/11/2016.
+ * Represents a particle at a position, with Objective Function Value calculated for that position.
  */
 public class Particle {
-    private List<Double> position;
-    private Double charge;
-    private int dimensionsCount;
+    // column vector
+    private BasicMatrix position;
+    private Double functionValue;
 
-    public Particle(List<Double> position, Double charge) {
+    Particle(BasicMatrix position, double functionValue) {
         this.position = position;
-        this.dimensionsCount = position.size();
-        this.charge = charge;
+        this.functionValue = functionValue;
     }
 
-    public List<Double> getPosition() {
+    Particle(double[] position, double functionValue) {
+        BasicMatrix.Factory<PrimitiveMatrix> factory = PrimitiveMatrix.FACTORY;
+        this.position = factory.columns(position);
+        this.functionValue = functionValue;
+    }
+
+    public BasicMatrix getPosition() {
         return position;
     }
 
-    public void setPosition(List<Double> position) {
-        if (position.size() != dimensionsCount) {
+    public void setPosition(BasicMatrix position) throws IllegalArgumentException {
+        if (position.count() != dimensionsCount()) {
             // make sure position lists are always of the same size
             throw new IllegalArgumentException("Attempting to set particle's position to another dimensions." +
-                    "Was "+dimensionsCount+", now "+position.size());
+                    "Was "+dimensionsCount()+", now "+position.countRows());
         }
         this.position = position;
     }
 
-    public Double getCharge() {
-        return charge;
+    public double getFunctionValue() {
+        return functionValue;
     }
 
-    public void setCharge(Double charge) {
-        this.charge = charge;
+    public void setFunctionValue(double functionValue) {
+        this.functionValue = functionValue;
     }
 
     public String toString() {
-        return "x=" + position.toString() + " q=" + charge.toString();
+        return "x=" + position.toString() + " q=" + functionValue.toString();
     }
 
 
@@ -48,12 +54,16 @@ public class Particle {
 
         Particle other = (Particle) o;
         if (! position.equals(other.position)) return false;
-        if (! charge.equals(other.charge)) return false;
+        if (! functionValue.equals(other.functionValue)) return false;
 
         return true;
     }
 
     public int hashCode() {
-        return charge.intValue();
+        return functionValue.intValue();
+    }
+
+    private long dimensionsCount() {
+        return position.count();
     }
 }

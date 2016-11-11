@@ -2,46 +2,58 @@ package com.alexanderjuda.electro;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.ojalgo.matrix.BasicMatrix;
+
 /**
- * Created by alex on 07/11/2016.
+ * Generates a population with given global constraints.
  */
 public class PopulationStarter {
-    private List<Pair<Double, Double>> constraints;
+    // n-by-2 matrix; two columns represent lower and upper bounds for i-th dimension
+    private BasicMatrix constraints;
 
-    public PopulationStarter(List<Pair<Double, Double>> constraints) {
+    PopulationStarter(BasicMatrix constraints) {
         this.constraints = constraints;
     }
 
-    // lambdas should be of size populationSize * dimensionsCount
-    List<Particle> generatePopulation(Objectiver objectiver, int populationSize, List<Double> lambdas) {
-        if (lambdas.size() != populationSize * dimensionsCount()) {
-            throw new IllegalArgumentException("Argument lambdas has invalid size of "+lambdas.size()+".\n" +
-                    "Should be "+(populationSize * dimensionsCount())+".");
+    // Lambdas matrix should have random values. It's passed as argument to keep the function pure.
+    // j-th column in lambdas is related to j-th generated particle.
+    // i-th row in lambdas column is related to i-th dimension in generated particle's position.
+    List<Particle> generatePopulation(Objectiver objectiver, int populationSize, BasicMatrix lambdas)
+            throws IllegalArgumentException {
+        if (lambdas.countRows() != dimensionsCount()) {
+            throw new IllegalArgumentException("lambdas matrix has incorrect number of columns " +
+                    "("+lambdas.countRows()+" vs "+dimensionsCount()+").");
+        }
+        if (lambdas.countColumns() != populationSize) {
+            throw new IllegalArgumentException("lambdas matrix has incorrect number of rows "+
+                    "("+lambdas.countColumns()+" vs "+populationSize+").");
         }
 
-        List<Particle> population = new ArrayList<>();
+        // Assuming following being column vectors:
+        // p (position), lambda (random factor), l (lower constraint), u (upper constraint)
+        // then:
+        // p = l + lambda .* (u - l)
+        //   = (l*(-1) + u) .* lambda + l
+        BasicMatrix l = constraints.selectColumns(0);
+        BasicMatrix u = constraints.selectColumns(1);
 
+        List<Particle> particles = new ArrayList<>();
         for (int i = 0; i < populationSize; i++) {
-            List<Double> position = new ArrayList<>();
-            for (int dim = 0; dim < dimensionsCount(); dim++) {
-                Pair<Double, Double> constraint = constraints.get(dim);
-                Double l = constraint.getFirst();
-                Double u = constraint.getSecond();
-                Double lambda = lambdas.get(i * dimensionsCount() + dim);
+            BasicMatrix lambda = lambdas.selectColumns(i);
+            // // TODO: 11/11/2016 replace *(-1) with .substract()
+            BasicMatrix p = u.subtract(l).multiplyElements(lambda).add(l);
 
-                Double positionValue = l + lambda * (u - l);
-                position.add(positionValue);
-            }
-            List<Integer> indices = objectiver.indicesFromPosition(position);
-            Double functionValue = objectiver.functionValue(indices);
-            Particle particle = new Particle(position, functionValue);
-            population.add(particle);
+            double functionValue = objectiver.functionValueForPosition(p);
+
+            Particle particle = new Particle(p, functionValue);
+            particles.add(particle);
         }
 
-        return population;
+        return particles;
     }
 
-    private int dimensionsCount() {
-        return constraints.size();
+    private long dimensionsCount() {
+        return constraints.countRows();
     }
 }

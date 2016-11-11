@@ -1,10 +1,10 @@
 package com.alexanderjuda.electro;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import org.ojalgo.matrix.BasicMatrix;
 
 /**
  * Particle force calculator based on
@@ -12,25 +12,21 @@ import java.util.stream.Stream;
  * by A. Yurtkuran & E. Emel (AKA TSP paper).
  */
 public class Forcer {
-    static List<Double> relativeForce(List<Double> position1, List<Double> position2,
-                                List<Double> worstPosition, List<Double> bestPosition,
-                                Objectiver objectiver) {
-
-        List<Double> positionDiff = relativePosition(position1, position2);
-        double charge = relativeCharge(position1, position2, worstPosition, bestPosition, objectiver);
-        List<Double> force = scaledPosition(positionDiff, charge);
+    static BasicMatrix relativeForce(BasicMatrix position1, BasicMatrix position2, double relativeCharge) {
+        BasicMatrix positionDiff = position2.subtract(position1);
+        BasicMatrix force = positionDiff.multiply(relativeCharge);
 
         return force;
     }
 
-    static double relativeCharge(List<Double> position1, List<Double> position2,
-                                 List<Double> worstPosition, List<Double> bestPosition,
+    static double relativeCharge(BasicMatrix position1, BasicMatrix position2,
+                                 BasicMatrix worstPosition, BasicMatrix bestPosition,
                                  Objectiver objectiver) {
 
-        int n1 = position1.size();
-        int n2 = position2.size();
-        int nWorst = worstPosition.size();
-        int nBest = bestPosition.size();
+        long n1 = position1.countRows();
+        long n2 = position2.countRows();
+        long nWorst = worstPosition.countRows();
+        long nBest = bestPosition.countRows();
         if (n2 != n1 || nWorst != n1 || nBest != n1) {
             List<String> sizeStrings = Stream.of(n1, n2, nWorst, nBest)
                     .map(Object::toString).collect(Collectors.toList());
@@ -43,33 +39,5 @@ public class Forcer {
         double f_best = objectiver.functionValueForPosition(bestPosition);
 
         return (f_xi - f_xj) / (f_worst - f_best);
-    }
-
-    static List<Double> relativePosition(List<Double> position, List<Double> otherPosition) {
-        int n1 = position.size();
-        int n2 = otherPosition.size();
-        if (n2 != n1) {
-            List<String> sizeStrings = Stream.of(n1, n2)
-                    .map(Object::toString).collect(Collectors.toList());
-            throw new IllegalArgumentException("Invalid position dimensions: " + String.join(", ", sizeStrings));
-        }
-
-        List<Double> relative = new ArrayList<>();
-        for (int i = 0; i < n1; i++) {
-            double diff = otherPosition.get(i) - position.get(i);
-            relative.add(diff);
-        }
-
-        return relative;
-    }
-
-    static List<Double> scaledPosition(List<Double> position, Double scalar) {
-        List<Double> scaledList = new ArrayList<>(position.size());
-        for (Double positionValue : position) {
-            double scaled = positionValue * scalar;
-            scaledList.add(scaled);
-        }
-
-        return scaledList;
     }
 }
