@@ -1,9 +1,10 @@
 package com.alexanderjuda.electro;
 
-import org.ojalgo.matrix.BasicMatrix;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.ojalgo.matrix.BasicMatrix;
+
 /**
  * Created by alex on 07/11/2016.
  */
@@ -40,7 +41,7 @@ public class PopulationStarter {
         for (int i = 0; i < populationSize; i++) {
             BasicMatrix lambda = lambdas.selectColumns(i);
             // // TODO: 11/11/2016 replace *(-1) with .substract()
-            BasicMatrix p = l.multiply(-1.0).add(u).multiplyElements(lambda).add(l);
+            BasicMatrix p = u.subtract(l).multiplyElements(lambda).add(l);
 
             double functionValue = objectiver.functionValueForPosition(p);
 

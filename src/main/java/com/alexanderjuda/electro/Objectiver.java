@@ -1,11 +1,11 @@
 package com.alexanderjuda.electro;
 
-import org.ojalgo.matrix.BasicMatrix;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.ojalgo.matrix.BasicMatrix;
 
 /**
  * Objective Function Calculator implementation based on

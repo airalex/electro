@@ -3,8 +3,6 @@ package com.alexanderjuda.electro;
 import org.ojalgo.matrix.BasicMatrix;
 import org.ojalgo.matrix.PrimitiveMatrix;
 
-import java.util.List;
-
 /**
  * Created by alex on 07/11/2016.
  */

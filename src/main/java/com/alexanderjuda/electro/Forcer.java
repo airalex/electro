@@ -1,10 +1,10 @@
 package com.alexanderjuda.electro;
 
-import org.ojalgo.matrix.BasicMatrix;
-
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import org.ojalgo.matrix.BasicMatrix;
 
 /**
  * Particle force calculator based on
