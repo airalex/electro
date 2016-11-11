@@ -35,7 +35,7 @@ public class ObjectiverTest {
     public void indicesFromSortedPosition() throws Exception {
         // Given
         BasicMatrix.Factory<PrimitiveMatrix> factory = PrimitiveMatrix.FACTORY;
-        BasicMatrix position = factory.rows(new double[] {0.0, 2.0, 2.5, 3.1, 3.4});
+        BasicMatrix position = factory.columns(new double[] {0.0, 2.0, 2.5, 3.1, 3.4});
         // When
         List<Integer> indices = Objectiver.indicesFromPosition(position);
 
@@ -48,7 +48,7 @@ public class ObjectiverTest {
         // Given
         BasicMatrix.Factory<PrimitiveMatrix> factory = PrimitiveMatrix.FACTORY;
         //                                number in order: 0    5    1    6    2    3    4
-        BasicMatrix position = factory.rows(new double[] {0.0, 5.0, 2.0, 6.1, 2.5, 3.1, 3.4});
+        BasicMatrix position = factory.columns(new double[] {0.0, 5.0, 2.0, 6.1, 2.5, 3.1, 3.4});
 
         // When
         List<Integer> indices = Objectiver.indicesFromPosition(position);
@@ -63,7 +63,7 @@ public class ObjectiverTest {
         // Given
         BasicMatrix.Factory<PrimitiveMatrix> factory = PrimitiveMatrix.FACTORY;
         //                                number in order: 0    5    1    6    2    3    4
-        BasicMatrix position = factory.rows(new double[] {0.0, 5.0, 2.0, 6.1, 2.5, 3.1, 3.4});
+        BasicMatrix position = factory.columns(new double[] {0.0, 5.0, 2.0, 6.1, 2.5, 3.1, 3.4});
 
         // When
         List<Integer> indices = Objectiver.indicesFromPosition(position);
@@ -85,7 +85,7 @@ public class ObjectiverTest {
         Objectiver objectiver = new Objectiver(costs);
 
         // When
-        BasicMatrix position = factory.rows(new double[] {0.1, 1.3, 2.4});
+        BasicMatrix position = factory.columns(new double[] {0.1, 1.3, 2.4});
         Double value = objectiver.functionValueForPosition(position);
 
         // Then
