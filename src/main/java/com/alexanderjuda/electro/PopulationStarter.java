@@ -35,10 +35,11 @@ public class PopulationStarter {
         //   = (l*(-1) + u) .* lambda + l
         BasicMatrix l = constraints.selectColumns(0);
         BasicMatrix u = constraints.selectColumns(1);
-        
+
         List<Particle> particles = new ArrayList<>();
         for (int i = 0; i < populationSize; i++) {
             BasicMatrix lambda = lambdas.selectColumns(i);
+            // // TODO: 11/11/2016 replace *(-1) with .substract()
             BasicMatrix p = l.multiply(-1.0).add(u).multiplyElements(lambda).add(l);
 
             double functionValue = objectiver.functionValueForPosition(p);
