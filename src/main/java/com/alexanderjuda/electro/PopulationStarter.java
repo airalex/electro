@@ -6,7 +6,7 @@ import java.util.List;
 import org.ojalgo.matrix.BasicMatrix;
 
 /**
- * Created by alex on 07/11/2016.
+ * Generates a population with given global constraints.
  */
 public class PopulationStarter {
     // n-by-2 matrix; two columns represent lower and upper bounds for i-th dimension
@@ -16,6 +16,7 @@ public class PopulationStarter {
         this.constraints = constraints;
     }
 
+    // Lambdas matrix should have random values. It's passed as argument to keep the function pure.
     // j-th column in lambdas is related to j-th generated particle.
     // i-th row in lambdas column is related to i-th dimension in generated particle's position.
     List<Particle> generatePopulation(Objectiver objectiver, int populationSize, BasicMatrix lambdas)

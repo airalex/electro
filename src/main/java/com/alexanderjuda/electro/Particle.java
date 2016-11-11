@@ -4,7 +4,7 @@ import org.ojalgo.matrix.BasicMatrix;
 import org.ojalgo.matrix.PrimitiveMatrix;
 
 /**
- * Created by alex on 07/11/2016.
+ * Represents a particle at a position, with Objective Function Value calculated for that position.
  */
 public class Particle {
     // column vector

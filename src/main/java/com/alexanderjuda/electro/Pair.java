@@ -1,7 +1,7 @@
 package com.alexanderjuda.electro;
 
 /**
- * Created by alex on 07/11/2016.
+ * A tuple replacement.
  */
 public class Pair<A, B> {
     private A first;
